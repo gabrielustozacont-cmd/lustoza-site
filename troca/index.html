@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Troca ou Venda – Lustoza Store</title>
+<style>
+:root{--ac:#d4a017;--bg:#0c0c0c;--tx:#f1ece2;--mut:#9b958a;--card:#181816;--ln:#2e2b25}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
+.app{max-width:480px;margin:0 auto;padding:16px 16px 120px;min-height:100vh}
+.brand{text-align:center;font-weight:700;font-size:18px;letter-spacing:2px;text-transform:uppercase;font-family:Georgia,'Times New Roman',serif}.brand b{color:var(--ac)}
+.bar{height:6px;background:var(--ln);border-radius:9px;margin:12px 0 4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--ac);transition:width .3s}
+.stp{font-size:12px;color:var(--mut)}
+h1{font-size:24px;line-height:1.15;margin:20px 0 4px;letter-spacing:-.5px}
+h1 em{color:var(--ac);font-style:normal}
+p.sub{color:var(--mut);margin:0 0 8px;font-size:14px}
+.grid{display:grid;gap:10px;margin-top:14px}
+.opt{background:var(--card);border:2px solid var(--ln);border-radius:14px;padding:14px;font-size:15px;font-weight:600;text-align:left;cursor:pointer;color:var(--tx);width:100%;font-family:inherit}
+.opt small{display:block;font-weight:400;color:var(--mut);font-size:12px;margin-top:2px}
+.opt.on{border-color:var(--ac);background:#2a2214}
+.lbl{font-size:13px;font-weight:700;margin:20px 0 8px;color:var(--tx)}
+.lbl span{font-weight:400;color:var(--mut)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:2px solid var(--ln);background:var(--card);border-radius:99px;padding:10px 14px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;color:var(--tx)}
+.chip.on{border-color:var(--ac);background:var(--ac);color:#1a1405}
+input[type=text]{width:100%;padding:14px;border:2px solid var(--ln);border-radius:12px;font-size:16px;font-family:inherit;background:var(--card);color:var(--tx);margin-top:8px}
+input[type=text]:focus{outline:none;border-color:var(--ac)}
+.foot{position:fixed;left:0;right:0;bottom:0;background:linear-gradient(transparent,var(--bg) 30%);padding:24px 16px 16px}
+.foot .in{max-width:480px;margin:0 auto;display:flex;gap:10px}
+.btn{flex:1;display:block;text-align:center;text-decoration:none;border:0;border-radius:14px;padding:16px;font-size:16px;font-weight:700;background:var(--ac);color:#1a1405;cursor:pointer;font-family:inherit}
+.btn[disabled]{opacity:.35;pointer-events:none}
+.btn.sec{flex:0 0 auto;background:var(--card);color:var(--tx);border:2px solid var(--ln)}
+.btn.wa{background:#1fb855;color:#fff}
+.sum{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:14px;font-size:14px;line-height:1.6;white-space:pre-wrap;margin-top:14px}
+.box{background:#2a2214;border-radius:12px;padding:12px;font-size:13px;line-height:1.5;margin-top:14px}
+.note{font-size:12px;color:var(--mut);margin-top:12px;line-height:1.5}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="brand"><img src="crown.png" alt="" style="display:block;margin:0 auto 6px;width:84px;height:auto">Lustoza <b>Store</b></div>
+  <div id="prog"></div>
+  <div id="view"></div>
+</div>
+<div class="foot"><div class="in" id="foot"></div></div>
+<script>
+// ===== CONFIGURAÇÃO =====
+var WHATS = "5575991412847"; // número da loja: 55 + DDD + número (só dígitos)
+// ========================
+var IPH=["iPhone 11","iPhone 11 Pro","iPhone 11 Pro Max","iPhone 12","iPhone 12 Pro","iPhone 12 Pro Max","iPhone 13","iPhone 13 Pro","iPhone 13 Pro Max","iPhone 14","iPhone 14 Plus","iPhone 14 Pro","iPhone 14 Pro Max","iPhone 15","iPhone 15 Plus","iPhone 15 Pro","iPhone 15 Pro Max","iPhone 16","iPhone 16 Plus","iPhone 16 Pro","iPhone 16 Pro Max","iPhone 17","iPhone 17 Pro","iPhone 17 Pro Max","Outro modelo"];
+var COR=["Preto","Branco","Azul","Rosa","Verde","Vermelho","Amarelo","Roxo","Dourado","Prata","Grafite","Titânio natural","Titânio preto","Titânio branco","Titânio deserto","Laranja","Outra"];
+var NONE="Nenhuma";
+// tipos: s=escolha única, m=múltipla, t=texto
+var PAGES=[
+ {t:'Qual é o seu <em>iPhone</em>?',q:[
+  {k:"modelo",l:"Qual modelo?",y:"s",o:IPH},
+  {k:"outro",l:"Qual modelo?",y:"t",ph:"Ex.: iPhone XR",if:function(){return S.modelo==="Outro modelo"}},
+  {k:"gb",l:"Quantos gigas?",y:"s",o:["64 GB","128 GB","256 GB","512 GB","1 TB","Não sei"]},
+  {k:"cor",l:"Qual cor?",y:"s",o:COR},
+  {k:"uso",l:"Quanto tempo de uso você tem com ele?",y:"s",o:["Menos de 6 meses","6 meses a 1 ano","1 a 2 anos","2 a 3 anos","Mais de 3 anos"]}]},
+ {t:'<em>Origem</em> e acessórios',q:[
+  {k:"onde",l:"Onde você comprou?",y:"s",o:["Apple Store / Apple Online","Loja autorizada / Operadora","Loja de iPhone (Brasil)","Mercado Livre / Internet","Comprei de uma pessoa","Viagem / exterior","Ganhei de presente"]},
+  {k:"lac",l:"Comprou lacrado ou seminovo?",y:"s",o:["Lacrado (novo)","Seminovo"]},
+  {k:"caixa",l:"Tem caixa?",y:"s",o:["Sim","Não"]},
+  {k:"cabo",l:"Tem cabo?",y:"s",o:["Sim","Não"]},
+  {k:"ast",l:"Já foi para a assistência técnica alguma vez?",y:"s",o:["Nunca","Sim, já foi","Não sei"]}]},
+ {t:'<em>Aparência</em> do aparelho',q:[
+  {k:"tela",l:"A tela tem alguma marca?",s:"Marque todas que tiver",y:"m",o:["Marca d'água","Linhas","Manchas","Listras","Arranhões","Trincos / trincada",NONE]},
+  {k:"fundo",l:"E o fundo (traseira)?",y:"m",o:["Arranhões","Trincado","Marcas de uso",NONE]},
+  {k:"lat",l:"A lateral tem marca de pancada ou arranhão?",y:"m",o:["Arranhões","Marcas de pancada","Amassado",NONE]}]},
+ {t:'<em>Funcionamento</em>',q:[
+  {k:"bat",l:"Qual a saúde da bateria?",s:"Ajustes › Bateria › Saúde da Bateria",y:"s",o:["100% a 90%","89% a 85%","84% a 80%","79% a 75%","Abaixo de 75%","Não sei"]},
+  {k:"cam",l:"Câmeras frontal e traseira funcionam corretamente?",y:"s",o:["Sim, as duas","Frontal com problema","Traseira com problema","As duas com problema"]},
+  {k:"fid",l:"O Face ID está normal?",y:"s",o:["Sim, normal","Não funciona","Funciona às vezes"]},
+  {k:"som",l:"Os alto-falantes estão com volume e qualidade de som bons?",y:"s",o:["Sim, normais","Volume baixo","Chiado / som ruim"]}]},
+ {id:"novo",t:'Qual aparelho você <em>quer levar</em>?',q:[
+  {k:"quer",l:"Modelo, memória e cor",s:'Se tiver dúvida, escreva "quero sugestão"',y:"t",ph:"Ex.: iPhone 17 Pro 256 GB laranja",req:1},
+  {k:"qlac",l:"Prefere lacrado ou seminovo?",y:"s",o:["Lacrado","Seminovo","Orçamento das duas formas","Tanto faz"]}]},
+ {t:'Como podemos te <em>chamar</em>?',q:[{k:"nome",l:"Seu nome",y:"t",ph:"Nome",req:1}]}
+];
+var S={obj:"",step:-1};
+function pages(){var o=[];PAGES.forEach(function(p){if(p.id==="novo"&&S.obj!=="trocar")return;p.q.forEach(function(q){if(!vis(q))return;o.push({t:q.l,q:[{k:q.k,l:"",s:q.s,y:q.y,o:q.o,ph:q.ph}]})})});return o}
+function $(i){return document.getElementById(i)}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})}
+function pick(k,i,y){var q=findQ(k),v=q.o[i];
+ if(y==="s"){S[k]=v;S.step++;scrollTo(0,0)}
+ else{var a=S[k]||[];if(v===NONE)a=[NONE];else{a=a.filter(function(x){return x!==NONE});var j=a.indexOf(v);if(j>-1)a.splice(j,1);else a.push(v)}S[k]=a}
+ render()}
+function findQ(k){for(var i=0;i<PAGES.length;i++)for(var j=0;j<PAGES[i].q.length;j++)if(PAGES[i].q[j].k===k)return PAGES[i].q[j]}
+function vis(q){return !q.if||q.if()}
+function done(){if(S.step<0)return !!S.obj;var p=pages()[S.step];if(!p)return true;
+ var q=p.q[0];if(!REQ[q.k])return true;var v=S[q.k];return q.y==="m"?!!(v&&v.length):!!(v&&String(v).trim())}
+function prefix(k){return S[k]}
+function msg(){
+ var m=S.modelo==="Outro modelo"?S.outro:S.modelo;
+ ["uso","cor","onde","lac","caixa","cabo","ast","quer","qlac","nome"].forEach(function(k){if(!S[k])S[k]="Não informado"});
+ ["tela","fundo","lat"].forEach(function(k){if(!S[k]||!S[k].length)S[k]=["Não informado"]});
+ var L=["Olá! Quero *"+(S.obj==="trocar"?"TROCAR":"VENDER")+"* meu iPhone. Seguem as informações:","",
+ "📱 *Modelo:* "+m+" • "+S.gb+" • "+S.cor,
+ "⏳ *Tempo de uso:* "+S.uso,
+ "🛒 *Comprei em:* "+S.onde+" ("+S.lac+")",
+ "📦 *Caixa:* "+S.caixa+" | *Cabo:* "+S.cabo,
+ "🔧 *Assistência técnica:* "+S.ast,"",
+ "🖥️ *Tela:* "+S.tela.join(", "),
+ "📲 *Fundo:* "+S.fundo.join(", "),
+ "🔲 *Lateral:* "+S.lat.join(", "),"",
+ "🔋 *Bateria:* "+S.bat,
+ "📷 *Câmeras:* "+S.cam,
+ "🔓 *Face ID:* "+S.fid,
+ "🔊 *Alto-falantes:* "+S.som];
+ if(S.obj==="trocar")L.push("","🆕 *Quero levar:* "+S.quer+(S.qlac?" ("+S.qlac+")":""));
+ L.push("","👤 "+S.nome,"","(Vou enviar fotos/vídeo do aparelho a seguir.)");
+ return L.join("\n")}
+function render(){
+ var P=pages(),n=P.length+2,h="";
+ $("prog").innerHTML=S.step<0?"":'<div class="bar"><i style="width:'+((S.step+1)/(P.length+1)*100)+'%"></i></div><div class="stp">Etapa '+(S.step+1)+' de '+(P.length+1)+'</div>';
+ if(S.step<0){
+  h='<h1>O que você quer <em>fazer</em>?</h1><p class="sub">Responda tocando nas opções. Leva poucos minutos.</p><div class="grid">'
+   +'<button class="opt '+(S.obj==="trocar"?"on":"")+'" onclick="S.obj=\'trocar\';render()">🔄 Trocar meu iPhone<small>Usar o meu como parte do pagamento do novo</small></button>'
+   +'<button class="opt '+(S.obj==="vender"?"on":"")+'" onclick="S.obj=\'vender\';render()">💰 Vender meu iPhone<small>Receber o valor pelo meu aparelho</small></button></div>'
+   +'<div class="box">São várias perguntas, mas servem para termos segurança na negociação.</div>';
+ }else if(S.step<P.length){
+  var p=P[S.step];h='<h1>'+p.t+'</h1>';
+  p.q.forEach(function(q){if(!vis(q))return;
+   h+='<div class="lbl">'+q.l+(q.s?' <span>'+q.s+'</span>':'')+'</div>';
+   if(q.y==="t")h+='<input type="text" value="'+esc(S[q.k]||"")+'" placeholder="'+esc(q.ph||"")+'" oninput="S[\''+q.k+'\']=this.value;upd()">';
+   else h+='<div class="chips">'+q.o.map(function(o,i){var on=q.y==="s"?S[q.k]===o:(S[q.k]||[]).indexOf(o)>-1;return '<button class="chip '+(on?"on":"")+'" onclick="pick(\''+q.k+'\','+i+',\''+q.y+'\')">'+esc(o)+'</button>'}).join("")+'</div>'});
+ }else{
+  h='<h1>Tudo <em>pronto</em>!</h1><p class="sub">Confira e toque em enviar. O WhatsApp abre com tudo preenchido.</p><div class="sum">'+esc(msg())+'</div>'
+   +'<div class="box">📸 Depois de enviar, mande <b>fotos ou um vídeo</b> do aparelho (frente, fundo e laterais) na conversa.</div>'
+   +'<p class="note">Em caso de informação falsa identificada no ato da venda, a avaliação será alterada. O valor está condicionado à veracidade das informações prestadas e à conferência técnica do aparelho.</p>';
+ }
+ $("view").innerHTML=h;
+ var f="";if(S.step>=0)f+='<button class="btn sec" onclick="S.step--;render();scrollTo(0,0)">←</button>';
+ if(S.step>=P.length)f+='<a class="btn wa" target="_blank" rel="noopener" href="https://wa.me/'+WHATS+'?text='+encodeURIComponent(msg())+'">Enviar no WhatsApp</a>';
+ else f+='<button class="btn" id="nx" '+(done()?"":"disabled")+' onclick="S.step++;render();scrollTo(0,0)">'+nxl()+'</button>';
+ $("foot").innerHTML=f;
+}
+var REQ={modelo:1,outro:1,gb:1,bat:1,cam:1,fid:1,som:1};
+function nxl(){var p=pages()[S.step];if(!p)return"Continuar";var q=p.q[0],v=S[q.k];return REQ[q.k]||(v&&v.length&&String(v).trim())?"Continuar":"Pular"}
+function upd(){var b=$("nx");if(b){b.textContent=nxl();if(done())b.removeAttribute("disabled");else b.setAttribute("disabled","")}}
+render();
+</script>
+</body>
+</html>
