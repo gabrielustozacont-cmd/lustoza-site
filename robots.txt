@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://lustozastore.com.br/sitemap.xml
