@@ -93,6 +93,7 @@ function vis(q){return !q.if||q.if()}
 function done(){if(S.step<0)return !!S.obj;var p=pages()[S.step];if(!p)return true;
  var q=p.q[0];if(!REQ[q.k])return true;var v=S[q.k];return q.y==="m"?!!(v&&v.length):!!(v&&String(v).trim())}
 function prefix(k){return S[k]}
+function indName(){try{var p=new URLSearchParams(location.search).get("ind");if(p){p=p.replace(/[^\p{L}\p{N} _-]/gu,"").trim().slice(0,30);if(p){localStorage.setItem("ind",p)}}return localStorage.getItem("ind")||""}catch(e){return ""}}
 function msg(){
  var m=S.modelo==="Outro modelo"?S.outro:S.modelo;
  ["uso","cor","onde","lac","caixa","cabo","ast","quer","qlac","nome"].forEach(function(k){if(!S[k])S[k]="Não informado"});
@@ -111,7 +112,7 @@ function msg(){
  "🔓 *Face ID:* "+S.fid,
  "🔊 *Alto-falantes:* "+S.som];
  if(S.obj==="trocar")L.push("","🆕 *Quero levar:* "+S.quer+(S.qlac?" ("+S.qlac+")":""));
- L.push("","👤 "+S.nome,"","(Vou enviar fotos/vídeo do aparelho a seguir.)");
+ L.push("","👤 "+S.nome);var I=indName();if(I)L.push("🤝 *Indicado por:* "+I);L.push("","(Vou enviar fotos/vídeo do aparelho a seguir.)");
  return L.join("\n")}
 function render(){
  var P=pages(),n=P.length+2,h="";
