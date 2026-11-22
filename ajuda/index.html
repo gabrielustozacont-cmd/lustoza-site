@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ajuda com seu aparelho | Lustoza Store</title>
+<meta name="description" content="Vídeos e dicas para configurar seu aparelho, garantia e suporte. Lustoza Store.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 100 100%27%3E%3Ctext y=%27.9em%27 font-size=%2790%27%3E%F0%9F%91%91%3C/text%3E%3C/svg%3E">
+<style>
+  :root{--fundo:#0b0d12;--card:#141824;--linha:#232a3b;--destaque:#d4a537;--txt:#f2f4f8;--sub:#9aa4b8}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--fundo);color:var(--txt);line-height:1.5}
+  header{background:var(--fundo);border-bottom:1px solid var(--linha);text-align:center;padding:28px 18px 24px}
+  header h1{font-size:1.35rem;font-weight:800;letter-spacing:.02em}
+  header h1 span{color:var(--destaque)}
+  header p{color:var(--sub);font-size:.95rem;margin-top:6px}
+  main{max-width:680px;margin:0 auto;padding:18px 16px 40px}
+  .botoes{display:flex;gap:10px;margin:4px 0 22px}
+  .btn{flex:1;display:block;text-align:center;text-decoration:none;font-weight:700;padding:14px 10px;border-radius:12px;font-size:.98rem}
+  .btn-site{background:var(--destaque);color:#111}
+  .btn-insta{background:transparent;color:var(--txt);border:1px solid var(--linha)}
+  .btn-zap{background:#25d366;color:#06210f;margin-top:6px}
+  section{background:var(--card);border:1px solid var(--linha);border-radius:14px;padding:16px;margin-bottom:16px}
+  h2{font-size:1.1rem;margin-bottom:10px}
+  .video{position:relative;padding-top:min(177.78%,604px);max-width:340px;margin:0 auto;border-radius:10px;overflow:hidden;background:#000}
+  .video iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+  .breve{color:var(--sub);font-size:.95rem}
+  ul{padding-left:20px;color:var(--sub);font-size:.95rem}
+  li{margin:4px 0}
+  .final{text-align:center}
+  .final p{color:var(--sub);font-size:.95rem;margin-bottom:12px}
+  footer{text-align:center;color:var(--sub);font-size:.85rem;padding:0 16px 30px}
+</style>
+</head>
+<body>
+<header>
+  <h1>LUSTOZA<span>STORE</span></h1>
+  <p>Ajuda com o seu aparelho</p>
+</header>
+
+<main>
+  <div class="botoes">
+    <a class="btn btn-site" id="site1" href="#">Visitar o site</a>
+    <a class="btn btn-insta" id="insta1" href="#">Seguir no Instagram</a>
+  </div>
+
+  <section>
+    <h2>Comprei meu iPhone: como transfiro meus dados?</h2>
+    <div class="video" id="v1"></div>
+  </section>
+
+  <section>
+    <h2>Meu iPhone travou, o que eu faço?</h2>
+    <div class="video" id="v2"></div>
+  </section>
+
+  <section>
+    <h2>Precisa de mais ajuda?</h2>
+    <a class="btn btn-zap" id="zap" href="#">Falar com o suporte no WhatsApp</a>
+  </section>
+
+  <section class="final">
+    <p>Conheça mais da Lustoza Store</p>
+    <div class="botoes" style="margin:0">
+      <a class="btn btn-site" id="site2" href="#">Visitar o site</a>
+      <a class="btn btn-insta" id="insta2" href="#">Instagram</a>
+    </div>
+  </section>
+</main>
+
+<footer>Lustoza Store · Salvador, Feira de Santana e Lauro de Freitas, BA</footer>
+
+<script>
+/* ====== EDITE SÓ AQUI ====== */
+var CONFIG = {
+  site:      "https://lustozastore.com.br/?utm_source=sacola&utm_medium=qr",
+  instagram: "https://instagram.com/lustozastore_celulares",
+  whatsapp:  "5575991412847",               /* só números, com 55 + DDD */
+  msgZap:    "Olá! Comprei um aparelho na Lustoza Store e preciso de ajuda.",
+  video1:    "rN64cN8evLA",  /* transferência de dados */
+  video2:    "en1Rc9Zq41I"   /* iPhone travou */
+};
+/* =========================== */
+
+function $(i){return document.getElementById(i)}
+["site1","site2"].forEach(function(i){$(i).href=CONFIG.site});
+["insta1","insta2"].forEach(function(i){$(i).href=CONFIG.instagram});
+$("zap").href="https://wa.me/"+CONFIG.whatsapp+"?text="+encodeURIComponent(CONFIG.msgZap);
+
+function pôr(el,id){
+  var box=$(el);
+  if(!id||id.indexOf("COLE_")===0){
+    box.className="breve";box.textContent="Vídeo em breve.";return;
+  }
+  box.innerHTML='<iframe src="https://www.youtube-nocookie.com/embed/'+id+
+    '?rel=0&modestbranding=1" title="Vídeo" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>';
+}
+pôr("v1",CONFIG.video1);
+pôr("v2",CONFIG.video2);
+</script>
+</body>
+</html>
